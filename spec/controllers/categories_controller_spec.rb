@@ -25,6 +25,26 @@ describe CategoriesController, "/index" do
       specify { response.body.should have_selector('ul.categorylist') }
     end
   end
+  
+  describe "test_create" do 
+    before(:each) do  
+      get :new
+    end
+    
+    it 'should render template new' do
+      assert_template 'new'
+      assert_tag :tag => "table",
+        :attributes => { :id => "category_container"}
+    end 
+    
+    it 'should create a new category' do 
+      post :edit, :category => {:name => "Foobar", :keywords => "Yay", :permalink => "We Did It", :description => "Congrats"} 
+      assert_response :redirect, :action => "index"
+      expect(assigns(:category)).not_to be_nil
+      expect(flash[:notice]).to eq("Category was successfully saved.")
+    end 
+    
+  end
 
   describe "if :index template exists" do
     it "should render :index" do
